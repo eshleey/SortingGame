@@ -1,11 +1,15 @@
 using UnityEngine;
+using System.Collections;
 
 public class MoveCube : MonoBehaviour
 {
     public ClickBox clickBox;
     private static MoveCube activeCube;
+    private Vector2 currentPos;
     private Vector2 defaultPos;
-    public float upDistance = 1.5f;
+    private float elapsedTime;
+    private float targetHeight = 1.5f;
+    private float moveDuration = 0.25f;
 
     private void Awake()
     {
@@ -27,11 +31,26 @@ public class MoveCube : MonoBehaviour
 
     private void MoveUp()
     {
-        transform.position = new Vector2(transform.position.x, defaultPos.y + upDistance);
+        currentPos = transform.position;
+        StartCoroutine(MoveCoroutine(currentPos, new Vector2(currentPos.x, currentPos.y + targetHeight)));
     }
 
     private void MoveDown()
     {
-        transform.position = defaultPos;
+        currentPos = transform.position;
+        StartCoroutine(MoveCoroutine(currentPos, defaultPos));
+    }
+
+    IEnumerator MoveCoroutine(Vector2 startPos, Vector2 targetPos)
+    {
+        elapsedTime = 0f;
+        while (elapsedTime < moveDuration)
+        {
+            transform.position = Vector2.Lerp(startPos, targetPos, elapsedTime / moveDuration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.position = targetPos;
     }
 }

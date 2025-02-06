@@ -5,6 +5,7 @@ public class MoveCube : MonoBehaviour
 {
     public ClickBox clickBox;
     private static MoveCube activeCube;
+    private Animator animator;
     private Vector2 currentPos;
     private Vector2 defaultPos;
     private float elapsedTime;
@@ -32,12 +33,16 @@ public class MoveCube : MonoBehaviour
     private void MoveUp()
     {
         currentPos = transform.position;
+        animator = GetComponent<Animator>();
+        animator.Play("Smile");
         StartCoroutine(MoveCoroutine(currentPos, new Vector2(currentPos.x, currentPos.y + targetHeight)));
     }
 
     private void MoveDown()
     {
         currentPos = transform.position;
+        animator = activeCube.GetComponent<Animator>();
+        animator.Play("Default");
         StartCoroutine(MoveCoroutine(currentPos, defaultPos));
     }
 
